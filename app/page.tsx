@@ -1,13 +1,13 @@
-import { Button } from "@/components/ui/button";
+import FeaturedProducts from "@/components/home/FeaturedProducts";
+import Hero from "@/components/home/Hero";
+
 
 
 export default function Home() {
   return (
   <div>
-    Home
-    <Button variant='outline' size='lg' className=" capitalize m-8">
-      click me 
-    </Button>
+    <Hero/>
+    <FeaturedProducts/>
   </div>
   );
 }
