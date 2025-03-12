@@ -7,5 +7,6 @@ export default function ProductsPage({searchParams}:{searchParams:{layout?:strin
   const search = searchParams.search || ''
   return (
     <ProductsContainer layout={layout} search={search} />
+    
   )
 }

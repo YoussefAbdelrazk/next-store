@@ -10,6 +10,7 @@ export default function ProductsGrid({products}:{products:Product[]}) {
   return (
     <div className=" pt-12 grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {products.map((product)=>{
+                
             const{ name,price,image}=product
             const productId = product.id
             const dollarsAmount = formatCurrency(price)
