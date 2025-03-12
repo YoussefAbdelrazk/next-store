@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Product } from '@prisma/client';
 import Image from 'next/image';
 import FavoriteToggleButton from './FavoriteToggleButton';
+
 export default function ProductsList({products}:{products:Product[]}) {
   return (
     <div className='mt-12 grid gap-y-8'>
@@ -11,6 +12,7 @@ export default function ProductsList({products}:{products:Product[]}) {
         const { name, price, image, company } = product;
         const dollarsAmount = formatCurrency(price);
         const productId = product.id;
+        
         return (
           <article key={productId} className='group relative'>
             <Link href={`/products/${productId}`}>
@@ -26,7 +28,6 @@ export default function ProductsList({products}:{products:Product[]}) {
                       className='w-full rounded-md object-cover'
                     />
                   </div>
-
                   <div>
                     <h2 className='text-xl font-semibold capitalize'>{name}</h2>
                     <h4 className='text-muted-foreground'>{company}</h4>
@@ -38,11 +39,11 @@ export default function ProductsList({products}:{products:Product[]}) {
               </Card>
             </Link>
             <div className='absolute bottom-8 right-8 z-5'>
-              <FavoriteToggleButton productId={productId} />
+              <FavoriteToggleButton />
             </div>
           </article>
         );
       })}
     </div>
-  )
+  );
 }
