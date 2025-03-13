@@ -16,8 +16,11 @@ import { LuAlignLeft } from 'react-icons/lu'
  import { Links } from '@/utils/Links'
 import Link from 'next/link';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
+import { auth } from '@clerk/nextjs/server'
 
 export default function LinksDropdown() {
+  const {userId} = auth();
+  const isAdmin = userId === process.env.ADMIN_USER_ID;
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -42,6 +45,7 @@ export default function LinksDropdown() {
         </SignedOut>
         <SignedIn>
           {Links.map((link) => {
+            if(link.label === 'dashboard' && !isAdmin) return null;
             return (
               <DropdownMenuItem key={link.href}>
                 <Link href={link.href} className='capitalize w-full'>
