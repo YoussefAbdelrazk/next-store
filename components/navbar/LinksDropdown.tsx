@@ -1,26 +1,25 @@
 
 
-
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-
 } from '@/components/ui/dropdown-menu';
 import UserIcon from './UserIcon';
 import SignOutLink from './SignOutLink';
-import { SignInButton, SignUpButton, SignedIn, SignedOut } from '@clerk/nextjs';
+import { SignInButton, SignUpButton, SignedIn, SignedOut, } from '@clerk/nextjs';
 import { LuAlignLeft } from 'react-icons/lu'
- import { Links } from '@/utils/Links'
+import { Links } from '@/utils/Links'
 import Link from 'next/link';
 import { DropdownMenuSeparator } from '@radix-ui/react-dropdown-menu';
-import { auth } from '@clerk/nextjs/server'
+import { auth } from '@clerk/nextjs/server';
 
 export default function LinksDropdown() {
-  const {userId} = auth();
-  const isAdmin = userId === process.env.ADMIN_USER_ID;
+  const { userId } = auth();
+  const isAdmin = userId === process.env.NEXT_PUBLIC_ADMIN_USER_ID;
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
