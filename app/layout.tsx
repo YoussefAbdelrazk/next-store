@@ -1,21 +1,21 @@
-import type { Metadata } from "next";
-import localFont from "next/font/local";
-import "./globals.css";
-import Navbar from "@/components/navbar/Navbar";
-import Container from "@/components/global/Container";
-import Providers from "./providers";
+import Container from '@/components/global/Container';
+import Navbar from '@/components/navbar/Navbar';
+import { ClerkProvider } from '@clerk/nextjs';
+import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import { Toaster } from 'sonner';
-import {ClerkProvider} from '@clerk/nextjs'
+import './globals.css';
+import Providers from './providers';
 
 const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
+  src: './fonts/GeistVF.woff',
+  variable: '--font-geist-sans',
+  weight: '100 900',
 });
 const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+  src: './fonts/GeistMonoVF.woff',
+  variable: '--font-geist-mono',
+  weight: '100 900',
 });
 
 export const metadata: Metadata = {
@@ -30,25 +30,17 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        
+      <html lang='en'>
+        <body
+          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        >
           <Providers>
-        <Navbar/>
-        <Container className=" py-20">
-        {children}
-        </Container>
-        <Toaster />
-        </Providers>
-        
-        
-        
-        
-      </body>
-    </html>
+            <Navbar />
+            <Container className=' py-20'>{children}</Container>
+            <Toaster />
+          </Providers>
+        </body>
+      </html>
     </ClerkProvider>
-    
   );
 }
