@@ -51,7 +51,7 @@ const getAuthUser = async () => {
   if (!user) {
     throw new Error("You must be logged in to access this route");
   }
-  return user;
+  return { id: user.id };
 };
 
 export const createProductAction = async (
@@ -216,14 +216,99 @@ export const toggleFavoriteAction = async (prevState: {
 };
 
 export const fetchUserFavorites = async () => {
+  try {
+    const user = await getAuthUser();
+    const favorites = await db.favorite.findMany({
+      where: {
+        clerkId: user.id,
+      },
+      include: {
+        product: true,
+      },
+    });
+    return favorites;
+  } catch (error) {
+    console.error("Error fetching user favorites:", error);
+    throw new Error("Failed to fetch user favorites.");
+  }
+};
+
+export const createReviewAction = async (prevState: any, formData: FormData) => {
+  return { message: "review submitted successfully" };
+};
+
+export const fetchProductReviews = async (productId: string) => {
+  const reviews = await db.review.findMany({
+    where: {
+      productId,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return reviews;
+};
+export const fetchProductReviewsByUser = async () => {
   const user = await getAuthUser();
-  const favorites = await db.favorite.findMany({
+  const reviews = await db.review.findMany({
     where: {
       clerkId: user.id,
     },
-    include: {
-      product: true,
+    select: {
+      id: true,
+      rating: true,
+      comment: true,
+      product: {
+        select: {
+          image: true,
+          name: true,
+        },
+      },
     },
   });
-  return favorites;
+  return reviews;
+};
+export const deleteReviewAction = async (prevState: { reviewId: string }) => {
+  const { reviewId } = prevState;
+  const user = await getAuthUser();
+
+  try {
+    await db.review.delete({
+      where: {
+        id: reviewId,
+        clerkId: user.id,
+      },
+    });
+
+    revalidatePath("/reviews");
+    return { message: "Review deleted successfully" };
+  } catch (error) {
+    return renderError(error);
+  }
+};
+export const findExistingReview = async (userId: string, productId: string) => {
+  return db.review.findFirst({
+    where: {
+      clerkId: userId,
+      productId,
+    },
+  });
+};
+export const fetchProductRating = async (productId: string) => {
+  const result = await db.review.aggregate({
+    _avg: {
+      rating: true,
+    },
+    _count: {
+      rating: true,
+    },
+    where: {
+      productId,
+    },
+  });
+
+  return {
+    rating: result._avg.rating?.toFixed(1) ?? 0,
+    count: result._count.rating ?? 0,
+  };
 };
